@@ -9,19 +9,19 @@ import { FieldBox, FieldLabel, LeaderPicker, RevealText, Section, YesNo } from "
 const leaderOptions = [
   {
     id: "leader-option-uio",
-    name: "Anne Berit Holm",
+    name: dofi.additionalLeader.name,
     role: "Instituttleder, Institutt for klinisk medisin",
     org: "UiO",
   },
   {
     id: "leader-option-ous",
-    name: "Hans Petter Aarseth",
+    name: dofi.leader.name,
     role: "Klinikkleder, Medisinsk klinikk",
     org: "OUS",
   },
   {
     id: "leader-option-ahus",
-    name: "Turid Bjørnstad",
+    name: "Liv Marit Skjelbreid",
     role: "Forskningsdirektør",
     org: "Ahus",
   },

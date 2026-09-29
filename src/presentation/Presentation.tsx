@@ -61,7 +61,7 @@ export function Presentation() {
   }, [hoverReady]);
 
   const advance = useCallback(() => setIndex((i) => (i + 1) % totalBeats), []);
-  const prev = useCallback(() => {
+  const clearPending = useCallback(() => {
     if (pendingAdvanceRef.current !== null) {
       window.clearTimeout(pendingAdvanceRef.current);
       pendingAdvanceRef.current = null;
@@ -71,8 +71,19 @@ export function Presentation() {
       arrivalFallbackRef.current = null;
     }
     awaitingArrivalRef.current = false;
-    setIndex((i) => (i - 1 + totalBeats) % totalBeats);
   }, []);
+  const prev = useCallback(() => {
+    clearPending();
+    setIndex((i) => (i - 1 + totalBeats) % totalBeats);
+  }, [clearPending]);
+  /** Hopp direkte til et steg (fremdriftslinjen). */
+  const goTo = useCallback(
+    (i: number) => {
+      clearPending();
+      setIndex(i);
+    },
+    [clearPending],
+  );
 
   const fireClickAndAdvance = useCallback(() => {
     if (!beat.clickOnAdvance) {
@@ -171,7 +182,7 @@ export function Presentation() {
           break;
         case "r":
         case "R":
-          setIndex(0);
+          goTo(0);
           break;
         case "a":
         case "A":
@@ -187,7 +198,7 @@ export function Presentation() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [next, prev]);
+  }, [next, prev, goTo]);
 
   useEffect(() => {
     if (!auto) return;
@@ -200,7 +211,8 @@ export function Presentation() {
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-night">
       <AnimatePresence mode="wait">
-        <motion.div key={view} className="absolute inset-0" {...sceneTransition}>
+        {/* `isolate`: overlegg (e-post, modaler) i scenen skal aldri legge seg over klikkflaten. */}
+        <motion.div key={view} className="absolute inset-0 isolate" {...sceneTransition}>
           {view === "title" && <TitleScene />}
           {view === "home" && <HomeScene beat={beat.key} />}
           {view === "login" && <LoginScene beat={beat.key} />}
@@ -248,21 +260,33 @@ export function Presentation() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 14 }}
           >
-            <div className="mx-auto flex items-center gap-3 rounded-full bg-night/80 px-4 py-2 backdrop-blur-sm">
+            <div className="pointer-events-auto mx-auto flex items-center gap-3 rounded-full bg-night/80 px-4 py-2 backdrop-blur-sm">
               {scenes.map((s, si) => (
-                <div key={s.id} className="flex items-center gap-1" title={s.label}>
+                <div key={s.id} className="flex items-center gap-1">
                   {s.beats.map((b, bi) => {
                     const isCurrent = b.key === beat.key;
                     const isPast =
                       si < beat.sceneIndex || (si === beat.sceneIndex && bi < beat.beatIndex);
+                    const target = flatBeats.find((f) => f.key === b.key)!.globalIndex;
                     return (
-                      <span
+                      <button
                         key={b.key}
-                        className={cn(
-                          "size-1.5 rounded-full transition-all",
-                          isCurrent ? "w-4 bg-secondary" : isPast ? "bg-white/60" : "bg-white/25",
-                        )}
-                      />
+                        type="button"
+                        title={`${s.label} · steg ${bi + 1} av ${s.beats.length}`}
+                        aria-label={`${s.label}, steg ${bi + 1}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          goTo(target);
+                        }}
+                        className="group -m-1 p-1"
+                      >
+                        <span
+                          className={cn(
+                            "block size-1.5 rounded-full transition-all group-hover:scale-150 group-hover:bg-secondary",
+                            isCurrent ? "w-4 bg-secondary" : isPast ? "bg-white/60" : "bg-white/25",
+                          )}
+                        />
+                      </button>
                     );
                   })}
                   {si < scenes.length - 1 && <span className="mx-1.5 h-3 w-px bg-white/25" />}

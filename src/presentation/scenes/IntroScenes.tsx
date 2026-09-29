@@ -72,6 +72,9 @@ export function TitleScene() {
           Trykk for å starte →
         </motion.div>
       </div>
+      <div className="absolute bottom-14 left-1/2 z-10 -translate-x-1/2 text-[11px] tracking-wide text-white/40">
+        Demo – alle personer, saker og data er fiktive
+      </div>
     </div>
   );
 }

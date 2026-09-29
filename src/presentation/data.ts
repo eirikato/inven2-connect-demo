@@ -11,12 +11,12 @@ export const dofi = {
   receipt: "20.03.2026",
   accepted: "28.04.2026",
   leader: {
-    name: "Hans Petter Aarseth",
+    name: "Gunnhild Vesterålen",
     role: "Klinikkleder, Medisinsk klinikk",
     org: "Oslo universitetssykehus HF",
   },
   additionalLeader: {
-    name: "Anne Berit Holm",
+    name: "Torfinn Skagemo",
     role: "Instituttleder, Institutt for klinisk medisin",
     org: "Universitetet i Oslo",
   },
@@ -98,9 +98,8 @@ export const ownership = [
 ];
 
 export const inven2 = {
-  evaluationManager: "Sigrid Vold",
+  evaluationManager: "Sigrid Vollan-Moe",
   projectManager: "Jonas Bekkevold",
-  bdManager: "Kristian Ødegård",
 };
 
 export const myDofis = [
