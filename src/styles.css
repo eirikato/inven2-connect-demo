@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+/*
+ * Inven2 Connect – designtokens hentet fra portalens metadata
+ * (home.json, inven2Styling.css, e-postmaler, tema-JSON).
+ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Inven2 Connect brand */
+  --color-hero: #77cede; /* hero-banner */
+  --color-primary: #cc457d; /* CTA-knapper, overskrifter */
+  --color-primary-dark: #a83364;
+  --color-secondary: #00b5dd; /* kortrammer, sekundær aksent */
+  --color-teal: #398e9e; /* topplinje i Lightning-app / e-post */
+  --color-teal-dark: #245961;
+  --color-link: #1797c0;
+  --color-footer: #5fc7d9;
+  --color-footer-grey: #928f8d;
+  --color-callout: #f0f8fc;
+  --color-callout-pink: #f9f5f7;
+  --color-mint: #98d8e5; /* dropdown hover i tema */
+
+  /* Nøytrale */
+  --color-ink: #080707;
+  --color-ink-weak: #3e3e3c;
+  --color-ink-soft: #706e6b;
+  --color-surface: #ffffff;
+  --color-surface-2: #f3f3f3;
+  --color-surface-3: #ecebea;
+  --color-hairline: #dddbda;
+  --color-card: #ffffff;
+
+  /* Status */
+  --color-ok: #2e844a;
+  --color-warn: #dd7a01;
+  --color-bad: #ba0517;
+
+  /* Mørk bakgrunn for tittel/avslutning */
+  --color-night: #0f2a30;
+  --color-night-2: #163c44;
+
+  /* Salesforce Lightning (intern visning) */
+  --color-sf-blue: #0176d3;
+  --color-sf-bg: #f3f2f2;
+  --color-sf-header: #032d60;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 8%), 0 4px 14px rgb(0 0 0 / 6%);
+  --shadow-float: 0 18px 48px rgb(15 42 48 / 26%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-hairline);
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+  body {
+    background-color: var(--color-night);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@utility card-elevated {
+  background: var(--color-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: 6px;
+  box-shadow: var(--shadow-card);
+}
+
+@utility night-surface {
+  background:
+    radial-gradient(120% 90% at 18% 12%, rgb(0 181 221 / 22%) 0%, transparent 60%),
+    radial-gradient(90% 80% at 85% 85%, rgb(204 69 125 / 18%) 0%, transparent 62%),
+    linear-gradient(160deg, var(--color-night) 0%, #081a1f 100%);
+}
+
+@utility scroll-slim {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-hairline) transparent;
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-hairline);
+    border-radius: 999px;
+  }
+}
+
+.click-focus-ring {
+  box-shadow:
+    0 0 0 3px rgb(0 181 221 / 22%),
+    0 0 18px rgb(0 181 221 / 30%);
+}
+
+.script-click-target {
+  transform-origin: center;
+  will-change: transform, filter, background-color;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .script-click-target {
+    will-change: auto;
+  }
+}
